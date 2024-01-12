@@ -112,7 +112,7 @@ const getMe = async (req, res, next) => {
     }
   
     // Fetch the user's data
-    const user = await User.findById(req.user.id);
+    const user = await User.findByPk(req.user.userId);
   
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
