@@ -16,11 +16,11 @@ const protect = async (req, res, next) => {
       }
   
       // Verify and decode token
-      const decoded = jwt.verify(token, process.env.JWT_KEY);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log(decoded);
   
       // Fetch user
-      const user = await User.findById(decoded.id);
+      const user = await User.findByPk (decoded.id);
       console.log(user);
   
       if (!user) {
