@@ -61,7 +61,7 @@ const User = sequelize.define('User', {
 
 // Add method to generate JWT
 User.prototype.getSignedJwtToken = function () {
-  return jwt.sign({ id: this.userId }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId: this.userId }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };

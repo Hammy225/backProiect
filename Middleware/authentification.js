@@ -7,9 +7,19 @@ dotenv.config({path : './cfg.env'});
 
 
 const protect = async (req, res, next) => {
-    try {
-      const token = req.cookies.token;
+    //try {
+      let token ;
+
+      if (req.headers.authorization && 
+        req.headers.authorization.startsWith('Bearer')
+        ){
+        token = req.headers.authorization.split(' ')[1];
+    } else if (req.cookies.token) {
+        token = req.cookies.token;
+    }
+      
       console.log(token);//<---------------------
+      //console.log(process.env.JWT_SECRET);
   
       if (!token) {
         return res.status(401).json({ success: false, message: 'Not authorized, no token' });
@@ -18,9 +28,11 @@ const protect = async (req, res, next) => {
       // Verify and decode token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log(decoded);//<------------------------
-  
+      console.log(decoded.userId);
+      
       // Fetch user
-      const user = await User.findByPk (decoded.id);
+      const user = await User.findByPk (decoded.userId);
+      //const user = await User.findByPk (decoded.userId);
       console.log(user);//<--------------------------
   
       if (!user) {
@@ -31,9 +43,9 @@ const protect = async (req, res, next) => {
       req.user = user;
   
       next();
-    } catch (err) {
-      return res.status(401).json({ success: false, message: 'Not authorized, token failed' });
-    }
+    //} catch (err) {
+      //return res.status(401).json({ success: false, message: 'Not authorized, token failed' });
+    //}
   };
 
 

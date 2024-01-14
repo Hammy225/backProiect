@@ -122,8 +122,6 @@ const getMe = async (req, res, next) => {
   
     res.json({ success: true, data: user });
 
-    
-
   };
 
 
