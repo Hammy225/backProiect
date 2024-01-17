@@ -76,25 +76,30 @@ const createProject = async (req, res, next) => {
         // Add user 
         req.body.user = req.user.id;
 
-        // Check for published project
-        const publishedProject = await Projects.findOne({ user: req.user.id });
-        
-        // if user != admin, can only add 1 project
-        if(publishedProject && req.user.role !=='admin') {
-            return next
-            (new ErrorResponse(
-                `The user with ID ${req.user.id} has already published a project`, 
-                400
-                )
-            );
-        }
 
-        const projects = await Projects.create(req.body);
+
+        // Check for published project
+        // const publishedProject = await Project.findByPk({ user: req.user.id });
+        
+        // // if user != admin, can only add 1 project
+        // if(publishedProject && req.user.role !=='admin') {
+        //     return next
+        //     (new ErrorResponse(
+        //         `The user with ID ${req.user.id} has already published a project`, 
+        //         400
+        //         )
+        // }
+        let project ;
+        try {
+             project = await Project.create(req.body);
+          } catch (error) {
+            console.error(error);
+          }
         
 
         res.status(201).json({
             success: true,
-            data: projects
+            data: project
         });
     } catch (err) {
         next(err);

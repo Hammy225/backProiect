@@ -7,16 +7,17 @@ dotenv.config({path : './cfg.env'});
 
 
 const protect = async (req, res, next) => {
-    //try {
+    try {
+
       let token ;
 
-      if (req.headers.authorization && 
-        req.headers.authorization.startsWith('Bearer')
-        ){
-        token = req.headers.authorization.split(' ')[1];
+      if (req.headers.authorization ){
+        token = req.headers.authorization;
+        console.log('boss');
     } else if (req.cookies.token) {
         token = req.cookies.token;
     }
+     
       
       console.log(token);//<---------------------
       //console.log(process.env.JWT_SECRET);
@@ -28,12 +29,15 @@ const protect = async (req, res, next) => {
       // Verify and decode token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log(decoded);//<------------------------
-      console.log(decoded.userId);
+      console.log(decoded.id);
+      //console.log(decoded.userId);
+
+
       
       // Fetch user
-      const user = await User.findByPk (decoded.userId);
+      const user = await User.findByPk (decoded.id);
       //const user = await User.findByPk (decoded.userId);
-      console.log(user);//<--------------------------
+      //console.log(user);//<--------------------------
   
       if (!user) {
         return res.status(404).json({ success: false, message: 'User not found' });
@@ -43,23 +47,17 @@ const protect = async (req, res, next) => {
       req.user = user;
   
       next();
-    //} catch (err) {
-      //return res.status(401).json({ success: false, message: 'Not authorized, token failed' });
-    //}
+    } catch (err) {
+      return res.status(401).json({ success: false, message: 'Not authorized, token failed' });
+    }
   };
 
-
-
-
-
-
   
-const authorize = (...roles) => {
-    return async (req, res, next) => {
-      const user = await User.findOne({ where: { id: req.user.id } });
-  
-      if (!user || !roles.includes(user.role)) {
-        return next(new ErrorResponse(`User role ${user ? user.role : 'unknown'} is unauthorized to access this route`, 403));
+  const authorize = (...roles) => {
+   // console.log(req.user.role);
+    return (req, res, next) => {
+      if (!req.user || !roles.includes(req.user.role)) {
+        return next(new ErrorResponse(`User role ${req.user ? req.user.role : 'unknown'} is unauthorized to access this route`, 403));
       }
   
       next();

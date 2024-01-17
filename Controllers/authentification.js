@@ -85,26 +85,7 @@ const login = async (req, res, next) => {
 };
 
 //get the user currently logged in 
-//route 
-//
-// const getMe = async (req, res, next) => { 
-//     try {
-//         const user = await User.findByPk(req.user.userId);
 
-//         if (!user) {
-//             return next(new ErrorResponse('User not found', 404));
-//         }
-
-       
-
-//         res.status(200).json({
-//             success: true,
-//             data: user
-//         });       
-//     } catch (err) {
-//         next(err);
-//     }
-// };
 const getMe = async (req, res, next) => {
     // req.user should be set in the authentication middleware
     if (!req.user) {
@@ -113,12 +94,13 @@ const getMe = async (req, res, next) => {
   
     // Fetch the user's data
     const user = await User.findByPk(req.user.userId);
+    //console.log(user);
   
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    console.log(user);
+    //console.log(user);
   
     res.json({ success: true, data: user });
 
@@ -153,7 +135,7 @@ const updateDetails = asyncHandler( async (req, res, next) => {
 
 const sendTokenResponse = (user, statusCode, res) => {
     // Create token
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.userId }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
     });
   

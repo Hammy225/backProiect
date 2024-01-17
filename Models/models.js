@@ -4,6 +4,9 @@ import  jwt  from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config({path : './cfg.env'});
 
+
+
+await sequelize.query('DELETE FROM `Users_backup`;');
 // Define User model
 const User = sequelize.define('User', {
   userId: {
@@ -48,7 +51,8 @@ const User = sequelize.define('User', {
         args: 1092,
         msg: 'Please enter a group number.'
       }
-    },
+    }
+  },
   role: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -57,14 +61,18 @@ const User = sequelize.define('User', {
       },
     }
   }
-});
+);
 
 // Add method to generate JWT
-User.prototype.getSignedJwtToken = function () {
-  return jwt.sign({ userId: this.userId }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
-};
+
+// User.prototype.getSignedJwtToken = function () {
+//   const payload = { userId: this.userId, name: this.fullName };
+//   console.log(payload);
+//   return jwt.sign(payload, process.env.JWT_SECRET, {
+//     expiresIn: process.env.JWT_EXPIRE,
+//   });
+// };
+
 // Generate random  number to get a chance to become a reviewer
 
 User.prototype.assignRandomReviewer = function() {
@@ -185,14 +193,11 @@ const Judgment = sequelize.define('Judgment', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-
+  
   // Prevent user from submitting more than 1 judgment for project
-}, {
+  }
+
+, {
   uniqueKeys: {
       uniqueJudgment: {
           fields: ['userId', 'projectId']

@@ -15,29 +15,33 @@ const router = express.Router();
 //router.get('/requirement/:id', requirementController.getProjectRequirements);
 //router.put('/requirement_add/:id', requirementController.updateProjectRequirements);
 //judgments
-router.post('/create', judgmentController.createJudgment);
-router.get('/sent', judgmentController.getSentJudgments);
-router.get('/project/:id', judgmentController.getJudgmentsForProject);
-//authentification
-router.post('/register', AuthentificationController.register);//bine
-router.post('/login', AuthentificationController.login);//bine
-router.put('/updatedetails', AuthentificationController.updateDetails);
+router.post('/judgment/create/:id', judgmentController.createJudgment); // DONE
 
+router.get('/judgment/sent', judgmentController.getSentJudgments);
+router.get('/judgment/:id', judgmentController.getJudgmentsForProject);
+
+//authentification
+router.post('/register', AuthentificationController.register);// DONE
+router.post('/login', AuthentificationController.login);// DONE
+
+router.put('/updatedetails',protect, AuthentificationController.updateDetails);
+
+router.get('/me', protect , AuthentificationController.getMe); // DONE
 
 //router.put('/updatepassword', AuthentificationController.updatePassword);
 
 
-router.get('/me',protect , AuthentificationController.getMe);
+
 
 
 
 //project
-router.post('/project', projectController.createProject);
-router.get('/project/:id', projectController.getProjectById);
-router.get('/projects', projectController.getProjects);
-router.get('/project/user/:userId', projectController.getProjectByUser);
-router.put('/project/:id', projectController.updateProject);
-router.delete('/project/:id', projectController.deleteProject);
+router.post('/project', protect, authorize('student', 'judge', 'admin'), projectController.createProject); // DONE
+router.get('/project/:id', protect, projectController.getProjectById);
+router.get('/projects', protect, authorize('judge', 'professor', 'admin'), projectController.getProjects);
+router.get('/project/user/:userId', protect, projectController.getProjectByUser);
+router.put('/project/:id', protect, authorize('student', 'judge', 'admin'), projectController.updateProject);
+router.delete('/project/:id', protect, authorize('student', 'judge', 'admin'), projectController.deleteProject);
 
 
 export {router};

@@ -51,22 +51,20 @@ const getJudgmentsForProject = async (req, res, next) => {
 const createJudgment = async (req, res, next) => { 
     try {
         // Add user 
-        req.body.userId = req.user.id;
+       // req.body.userId = req.user.id;
         req.body.projectId = req.params.id;
 
+        console.log(req.params.projectId);
+
         const project = await Project.findByPk(req.params.id);
+        if (!project) {
+            return res.status(404).json({ success: false, message: 'Project not found' });
+        }
         req.body.projectName = project.title;
         
         const judgment = await Judgment.create(req.body);
 
-        if(project.userId.toString() === req.body.userId) {
-            return next(
-                new ErrorResponse(
-                    `The user with ID ${req.user.id} cannot judge his own project`, 
-                    400
-                )
-            );
-        }
+        
 
         res.status(201).json({
             success: true,
