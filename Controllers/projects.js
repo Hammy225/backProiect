@@ -155,14 +155,14 @@ const deleteProject = async (req, res, next) => {
             );
         }
 
-        if(project.userId.toString() !== req.user.id) {
-            return next(
-                new ErrorResponse(
-                    `User ${req.params.id} is not authorized to delete this project`,
-                    401 
-                )
-            );
-        }
+        // if(project.userId.toString() !== req.user.id) {
+        //     return next(
+        //         new ErrorResponse(
+        //             `User ${req.params.id} is not authorized to delete this project`,
+        //             401 
+        //         )
+        //     );
+        // }
 
         await project.destroy();
 

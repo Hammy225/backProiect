@@ -26,7 +26,7 @@ const getSentJudgments = async (req, res, next) => {
 //get all the judgments of a project 
 //route 
 //
-const getJudgmentsForProject = async (req, res, next) => { 
+const getJudgmentsForProject = async (req, res, next) => {   
     try {
         const judgments = await Judgment.findAll({ where: { projectId: req.params.id } });
 

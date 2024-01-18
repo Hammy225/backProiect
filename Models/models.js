@@ -236,7 +236,7 @@ Judgment.getAverageGrade = async function (projectId) {
 
       // Update the project's average grade
       const Project = sequelize.models.Project;
-      await Project.update({ averageGrade: avg.toFixed(2) }, { where: { id: projectId } });
+      await Project.update({ averageGrade: avg.toFixed(2) }, { where: { projectId: projectId } });
 
       return avg;
   } catch (err) {
