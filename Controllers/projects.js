@@ -110,9 +110,9 @@ const createProject = async (req, res, next) => {
 //update projecy
 const  updateProject = async (req, res, next) => { 
     try {
-        let projects = await Projects.findById(req.params.id);
+        let project = await Project.findByPk(req.params.id);
 
-        if (!projects) {
+        if (!project) {
             return next(
                 new ErrorResponse(
                     `projects not found with id of ${req.params.id}`,
@@ -121,22 +121,23 @@ const  updateProject = async (req, res, next) => {
             );
         }
 
-        if(projects.user.toString() !== req.user.id) {
-            return next(
-                new ErrorResponse(
-                    `User ${req.params.id} is not authorized to update this project`,
-                    401 
-                )
-            );
-        }
+        // if(projects.userId.toString() !== req.user.id) {
+        //     return next(
+        //         new ErrorResponse(
+        //             `User ${req.params.id} is not authorized to update this project`,
+        //             401 
+        //         )
+        //     );
+        // }
 
-        projects = await Projects.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
-        });
+        // projects = await Project.findByIdAndUpdate(req.params.id, req.body, {
+        //     new: true,
+        //     runValidators: true,
+        // });
+        await project.update(req.body);
 
-        res.status(200).json({ success: true, data: projects });
-    } catch (error) {
+        res.status(200).json({ success: true, data: project });
+    } catch (err) {
         next(err);
     }
 };

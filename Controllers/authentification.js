@@ -6,10 +6,6 @@ import {asyncHandler} from '../Middleware/async.js'
 import jwt from 'jsonwebtoken';
 
 
-//register user
-//route 
-//
-
 
 const register = async (req, res, next) => { 
     try {
@@ -52,8 +48,6 @@ const register = async (req, res, next) => {
 };
 
 //login user
-//route 
-//
 
 const login = async (req, res, next) => { 
     try {
@@ -106,10 +100,6 @@ const getMe = async (req, res, next) => {
 
   };
 
-
-//log out 
-//
-//
 
 
 

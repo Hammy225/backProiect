@@ -2,8 +2,6 @@ import { Project , Judgment} from "../Models/models.js";
 import { ErrorResponse } from "../utilities/error.js";
 
 //get all judgments posted bu a user 
-//route 
-//
 const getSentJudgments = async (req, res, next) => { 
     try {
         const judgment = await Judgment.find({user: req.user.id});
@@ -17,15 +15,14 @@ const getSentJudgments = async (req, res, next) => {
             );
         }
 
-        res.status(200).json({ succss: true, count: judgment.length, data: review });
+        res.status(200).json({ succss: true, count: judgment.length, data: judgment });
     } catch (err) {
         next(err);
     }
 };
 
 //get all the judgments of a project 
-//route 
-//
+
 const getJudgmentsForProject = async (req, res, next) => {   
     try {
         const judgments = await Judgment.findAll({ where: { projectId: req.params.id } });
@@ -46,8 +43,7 @@ const getJudgmentsForProject = async (req, res, next) => {
 };
 
 //create a judgment 
-//route
-//
+
 const createJudgment = async (req, res, next) => { 
     try {
         // Add user 

@@ -28,8 +28,8 @@ router.get('/me', protect , AuthentificationController.getMe); // DONE
 router.post('/project', protect, authorize('student', 'judge', 'admin'), projectController.createProject); // DONE 
 router.get('/project/:id', protect, projectController.getProjectById); // done
 router.get('/projects', protect, authorize('judge', 'professor', 'student'), projectController.getProjects); // done
-router.get('/project/user/:userId', protect, projectController.getProjectByUser);
-router.put('/project/update/:id', protect, authorize('student', 'judge', 'admin'), projectController.updateProject);
+//router.get('/project/user/:userId', protect, projectController.getProjectByUser);
+router.put('/project/update/:id', protect, authorize('student', 'judge', 'admin'), projectController.updateProject); // done
 router.delete('/project/delete/:id', protect, authorize('student', 'judge', 'admin'), projectController.deleteProject); // done
 
 
